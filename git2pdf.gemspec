@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "bin/git2pdf",
+    "git2pdf.gemspec",
     "lib/assets/fonts/Lato-Black.ttf",
     "lib/assets/fonts/Lato-BlackItalic.ttf",
     "lib/assets/fonts/Lato-Bold.ttf",
