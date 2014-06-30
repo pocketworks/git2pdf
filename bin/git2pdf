@@ -1,0 +1,33 @@
+#! /usr/bin/ruby
+require 'thor'
+require './lib/git2pdf'
+#require 'password'
+
+class Git2PdfBash < Thor
+  desc "gen [github username] [github password] [repos]", "Create a PDF for the open issues in a given repository."
+  option :repos, :default => "", aliases: :r
+  option :user, aliases: :u
+  option :password, aliases: :p, :default=>nil
+  option :organisation, aliases: :o
+
+  def gen
+    repos = options[:repos].split(',').collect { |r| r.strip } if options[:repos]
+    puts "Creating a PDF of GitHub issues for repos: #{repos.join(', ')}"
+    puts "Using organisation #{options[:organisation]}" if options[:organisation]
+    pass = options[:password]
+    if options[:password] == "password" or options[:password].nil? or options[:password].strip.length == 0
+      #option[:password] = Password.get("GitHub Password:")
+      puts "Password: "
+      pass = STDIN.noecho(&:gets)
+      pass = pass.strip.gsub(/\n/,'')
+    end
+
+    g = Git2Pdf.new repos: repos, basic_auth: [options[:user],pass], org: options[:organisation], user: options[:user]
+    g.execute
+    puts "\n\nNow open up issues.pdf"
+  end
+
+
+end
+
+Git2PdfBash.start(ARGV)

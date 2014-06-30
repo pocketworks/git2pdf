@@ -14,13 +14,14 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
-  gem.name = "github_issue_printer"
-  gem.homepage = "http://github.com/pocketworks/github_issue_printer"
+  gem.name = "git2pdf"
+  gem.homepage = "http://github.com/pocketworks/git2pdf"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "tobin@tobinharris.com"
+  gem.summary = %Q{Bash util to print sexy cards from your github issues}
+  gem.description = %Q{Bash util to print sexy cards from your github issues}
+  gem.email = "tobin@pocketworks.co.uk"
   gem.authors = ["Tobin Harris"]
+  gem.executables = ['git2pdf'] # note, it's the file name relative to `bin/`, not the project root
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new

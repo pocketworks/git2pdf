@@ -34,6 +34,9 @@ pkg
 #*.tmproj
 #tmtags
 
+.idea/
+issues.pdf
+
 # For emacs:
 #*~
 #\#*
