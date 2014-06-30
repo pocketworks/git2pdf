@@ -18,7 +18,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/pocketworks/git2pdf"
   gem.license = "MIT"
   gem.summary = %Q{Bash util to print sexy cards from your github issues}
-  gem.description = %Q{Bash util to print sexy cards from your github issues}
+  gem.description = %Q{For those that use Kanban or Scrum and want to print their cards so they can stick em on the wall}
   gem.email = "tobin@pocketworks.co.uk"
   gem.authors = ["Tobin Harris"]
   gem.executables = ['git2pdf'] # note, it's the file name relative to `bin/`, not the project root

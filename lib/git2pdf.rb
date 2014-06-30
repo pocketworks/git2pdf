@@ -9,7 +9,7 @@ class Git2Pdf
   def initialize(options={})
     @repos = options[:repos] || []
     @basic_auth = options[:basic_auth] || nil
-    @org = options[:org] || options[:user] || nil
+    @org = options[:org] || nil
   end
 
   def execute
@@ -21,7 +21,14 @@ class Git2Pdf
     batch = []
     self.repos.each do |repo|
       #json = `curl -u#{auth} https://api.github.com/repos/pocketworks/repo/issues?per_page=100 | jq '.[] | {state: .state, milestone: .milestone.title, created_at: .created_at, title: .title, number: .number, labels: [.labels[].name]}'`
-      json = open("https://api.github.com/repos/#{@org}/#{repo}/issues?per_page=200&state=open", :http_basic_authentication => basic_auth).read
+      json = ""
+      if @org
+        json = open("https://api.github.com/repos/#{@org}/#{repo}/issues?per_page=200&state=open", :http_basic_authentication => basic_auth).read
+      else
+        # for stuff like bob/stuff
+        json = open("https://api.github.com/repos/#{repo}/issues?per_page=200&state=open", :http_basic_authentication => basic_auth).read
+      end
+
       hash = JSON.parse(json)
 
       hash.each do |val|
@@ -39,7 +46,7 @@ class Git2Pdf
         batch << hash
       end
     end
-    puts batch[0]
+
     batch
   end
 
@@ -74,7 +81,7 @@ class Git2Pdf
         #
         # Load json to use on the first card
         #
-        puts issue
+        #puts issue
         #grid(row,col).bounding_box do
         transparent(0.1) { stroke_bounds }
 
@@ -84,7 +91,7 @@ class Git2Pdf
 
         #Short title
         font 'Lato', :style => :bold, size: 20
-        text_box issue[:short_title] || "", :at => [10, 190], :width => 190, :overflow => :shrink_to_fit
+        text_box issue[:short_title] || "", :at => [10, 190], :width => 210, :overflow => :shrink_to_fit
 
         # Milestone
         font 'Lato', :style => :normal, size: 12
@@ -114,8 +121,9 @@ class Git2Pdf
         #else
         #  col = col + 1
         #end
-        start_new_page
+        start_new_page unless issue == batch[batch.length-1]
       end
     end
+    batch.length
   end
 end
