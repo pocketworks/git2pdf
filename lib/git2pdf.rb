@@ -65,7 +65,8 @@ class Git2Pdf
                      :normal => "#{dir}/assets/fonts/Lato-Light.ttf"})
       font 'Lato'
       batch = batch.sort { |a, b| a["ref"]<=>b["ref"] and a["project"]<=>b["project"] }
-      logo = open("http://www.pocketworks.co.uk/images/logo.png")
+      #logo = open("http://www.pocketworks.co.uk/images/logo.png")
+      logo = open("#{dir}/assets/images/pocketworks.png")
       batch.each do |issue|
 
         ##
@@ -91,9 +92,11 @@ class Git2Pdf
         y_offset = 195
 
         #Ref
-        font 'Lato', :style => :normal, size: 28
-        text_box issue[:ref] || "", :at => [185, y_offset], :width => 100, :overflow => :shrink_to_fit, :align => :right
+        font 'Lato', :style => :bold, size: 28
+        text_box "##{issue[:ref]}" || "", :at => [185, y_offset], :width => 100, :overflow => :shrink_to_fit, :align => :right
 
+        # image watermark
+        image logo, :at=>[240,60], :width=>50
 
         #Short title
         short_title = issue[:short_title]
@@ -104,48 +107,49 @@ class Git2Pdf
         if issue[:milestone] and issue[:milestone] != ""
           y_offset = y_offset - 30
           # Milestone
-          font 'Lato', :style => :normal, size: 13
+          font 'Lato', :style => :normal, size: 16
           text_box issue[:milestone].upcase, :at => [margin, y_offset], :width => 280, :overflow => :shrink_to_fit
           #text_box fields["due"] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
+          y_offset = y_offset + 20
         end
         
-        y_offset = y_offset - 10
         
+        
+        fill_color "EEEEEE"
+        fill_color "D0021B" if issue[:type] == "BUG"            
+        fill_color "1D8FCE" if issue[:type] == "TASK"            
+        fill_color "FBF937" if issue[:type] == "FEATURE"
+        fill_color "F5B383" if issue[:type] == "AMEND"
+        fill_color "FBF937" if issue[:type] == "ENHANCEMENT"
+
         if issue[:type] and issue[:type] != ""
-          if issue[:type]            
-            
-            fill_color "CE1852" #default, assume everything a bug
-            fill_color "CCCCCC" if issue[:type] == "TASK"            
-            fill_color "FBF937" if issue[:type] == "FEATURE"
-            fill_color "F5B383" if issue[:type] == "AMEND"
-            fill_color "FBF937" if issue[:type] == "ENHANCEMENT"
-            
-            fill{rectangle([0,220], margin-10, 220)}
-            fill_color "000000"
-          end          
-          
-          y_offset = y_offset - 20
-          # Type
-          font 'Lato', :style => :bold, size: 16, :color => '888888'
-          text_box issue[:type], :at => [margin, y_offset], :width => 280-margin, :overflow => :shrink_to_fit
+          fill{rectangle([0,220], margin-10, 220)}          
+        else
+          fill{rectangle([0,220], margin-10, 220)}          
         end
+        fill_color "000000"
+        
+        # if issue[:type] and issue[:type] != ""
+#           y_offset = y_offset - 20
+#           # Type
+#           font 'Lato', :style => :bold, size: 16, :color => '888888'
+#           text_box issue[:type], :at => [margin, y_offset], :width => 280-margin, :overflow => :shrink_to_fit
+#         end
 
         if issue[:long_title]
-          y_offset = y_offset - 20
+          y_offset = y_offset - 50
           # Long title
-          font 'Lato', :style => :normal, size: 16
+          font 'Lato', :style => :normal, size: 18
           text_box issue[:long_title] ? issue[:long_title][0..120] : "NO DESCRIPTION", :at => [margin, y_offset], :width => 280-margin, :overflow => :shrink_to_fit
         end
 
         # Labels
-        font 'Lato', :style => :normal, size: 13
-        text_box issue[:labels] || "", :at => [margin, 20], :width => 280-margin, :overflow => :shrink_to_fit
+        font 'Lato', :style => :bold, size: 12
+        text_box issue[:labels].length == 0 ? "NO LABELS!" : issue[:labels], :at => [margin, 20], :width => 220-margin, :overflow => :shrink_to_fit
         #text_box fields[:due] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
         #end
 
-        # image
-
-        image logo, :at=>[220,23], :width=>65
+        
 
         #if col == 1
         #  row = row + 1
