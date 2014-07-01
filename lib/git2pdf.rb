@@ -34,10 +34,11 @@ class Git2Pdf
       hash.each do |val|
         labels = val["labels"].collect { |l| l["name"].upcase }.join(', ')
         type = ""
-        type = "BUG" if labels =~ /bug/i
-        type = "FEATURE" if labels =~ /feature/i
-        type = "FEATURE" if labels =~ /enhancement/i
-        type = "TASK" if labels =~ /task/i
+        type = "BUG" if labels =~ /bug/i #not billable
+        type = "FEATURE" if labels =~ /feature/i #billable
+        type = "ENHANCEMENT" if labels =~ /enhancement/i #billable
+        type = "AMEND" if labels =~ /amend/i #not billable
+        type = "TASK" if labels =~ /task/i #not billable
 
         milestone = val["milestone"] ? val["milestone"]["title"] : ""
 
@@ -54,6 +55,7 @@ class Git2Pdf
     require 'prawn'
     row = 0
     col = 0
+    margin = 20
     Prawn::Document.generate("issues.pdf", :page_size => "A7", :margin => 0, :page_layout => :landscape) do
       dir = File.dirname(__FILE__)
       font_families.update(
@@ -84,7 +86,7 @@ class Git2Pdf
         #
         #puts issue
         #grid(row,col).bounding_box do
-        transparent(0.1) { stroke_bounds }
+        #transparent(0.1) { stroke_bounds }
 
         y_offset = 195
 
@@ -94,40 +96,56 @@ class Git2Pdf
 
 
         #Short title
+        short_title = issue[:short_title]
+        short_title = short_title.split('/')[1] if short_title =~ /\//
         font 'Lato', :style => :bold, size: 20
-        text_box issue[:short_title], :at => [10, y_offset], :width => 210, :overflow => :shrink_to_fit
+        text_box short_title, :at => [margin, y_offset], :width => 210-margin, :overflow => :shrink_to_fit
 
-        if issue[:milestone]
+        if issue[:milestone] and issue[:milestone] != ""
           y_offset = y_offset - 30
           # Milestone
           font 'Lato', :style => :normal, size: 13
-          text_box issue[:milestone].upcase, :at => [10, y_offset], :width => 280, :overflow => :shrink_to_fit
+          text_box issue[:milestone].upcase, :at => [margin, y_offset], :width => 280, :overflow => :shrink_to_fit
           #text_box fields["due"] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
         end
-
-        if issue[:type] and not issue[:type] == ""
-          y_offset = y_offset - 30
+        
+        y_offset = y_offset - 10
+        
+        if issue[:type] and issue[:type] != ""
+          if issue[:type]            
+            
+            fill_color "CE1852" #default, assume everything a bug
+            fill_color "CCCCCC" if issue[:type] == "TASK"            
+            fill_color "FBF937" if issue[:type] == "FEATURE"
+            fill_color "F5B383" if issue[:type] == "AMEND"
+            fill_color "FBF937" if issue[:type] == "ENHANCEMENT"
+            
+            fill{rectangle([0,220], margin-10, 220)}
+            fill_color "000000"
+          end          
+          
+          y_offset = y_offset - 20
           # Type
           font 'Lato', :style => :bold, size: 16, :color => '888888'
-          text_box issue[:type], :at => [10, y_offset], :width => 280, :overflow => :shrink_to_fit
+          text_box issue[:type], :at => [margin, y_offset], :width => 280-margin, :overflow => :shrink_to_fit
         end
 
         if issue[:long_title]
           y_offset = y_offset - 20
           # Long title
           font 'Lato', :style => :normal, size: 16
-          text_box issue[:long_title] ? issue[:long_title][0..120] : "NO DESCRIPTION", :at => [10, y_offset], :width => 280, :overflow => :shrink_to_fit
+          text_box issue[:long_title] ? issue[:long_title][0..120] : "NO DESCRIPTION", :at => [margin, y_offset], :width => 280-margin, :overflow => :shrink_to_fit
         end
 
         # Labels
         font 'Lato', :style => :normal, size: 13
-        text_box issue[:labels] || "", :at => [10, 20], :width => 280, :overflow => :shrink_to_fit
+        text_box issue[:labels] || "", :at => [margin, 20], :width => 280-margin, :overflow => :shrink_to_fit
         #text_box fields[:due] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
         #end
 
         # image
 
-        image logo, :at=>[213,23], :width=>70
+        image logo, :at=>[220,23], :width=>65
 
         #if col == 1
         #  row = row + 1
