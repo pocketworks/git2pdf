@@ -1,8 +1,11 @@
-![](http://www.pocketworks.co.uk/images/logo.png)
+![](http://www.pocketworks.co.uk/images/git2pdf/logo.png)
 
 # Git2Pdf
 
 **Print physical Kanban cards from your GitHub issues, and stick that sweet stuff on your office wall**
+
+
+![](http://pocketworks.co.uk/images/git2pdf/git2pdf-on-wall.jpg)
 
 ## Install
 
