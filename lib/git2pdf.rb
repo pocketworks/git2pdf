@@ -105,7 +105,7 @@ class Git2Pdf
           #text_box fields["due"] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
         end
 
-        if issue[:type]
+        if issue[:type] and not issue[:type] == ""
           y_offset = y_offset - 30
           # Type
           font 'Lato', :style => :bold, size: 16, :color => '888888'
