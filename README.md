@@ -1,5 +1,7 @@
 ![](http://www.pocketworks.co.uk/images/git2pdf/logo.png)
 
+by [Pocketworks](http://pocketworks.co.uk), a UK mobile apps and sales technology development company.
+
 # Git2Pdf
 
 **Print physical Kanban cards from your GitHub issues, and stick that sweet stuff on your office wall**
