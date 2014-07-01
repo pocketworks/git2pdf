@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "git2pdf"
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tobin Harris"]
@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
     "lib/assets/fonts/Lato-Light.ttf",
     "lib/assets/fonts/Lato-LightItalic.ttf",
     "lib/assets/fonts/Lato-Regular.ttf",
+    "lib/assets/images/pocketworks.png",
     "lib/git2pdf.rb",
     "test/helper.rb",
     "test/test_git2pdf.rb"
