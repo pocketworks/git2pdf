@@ -1,6 +1,6 @@
 #! /usr/bin/ruby
 require 'thor'
-require './lib/git2pdf'
+require "#{File.expand_path File.dirname(__FILE__)}/../lib/git2pdf"
 #require 'password'
 
 class Git2PdfBash < Thor

@@ -57,7 +57,7 @@ class Git2Pdf
     col = 0
     margin = 20
     Prawn::Document.generate("issues.pdf", :page_size => "A7", :margin => 0, :page_layout => :landscape) do
-      dir = File.dirname(__FILE__)
+      dir = File.expand_path File.dirname(__FILE__)
       font_families.update(
           "Lato" => {:bold => "#{dir}/assets/fonts/Lato-Bold.ttf",
                      :italic => "#{dir}/assets/fonts/Lato-LightItalic.ttf",
