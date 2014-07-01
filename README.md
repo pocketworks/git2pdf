@@ -40,7 +40,7 @@ TODO:
 
 * Generates a PDF of GitHub issues, so you can print them out and stick em' on your kanban board or scrum board or whatever.
 * Include multiple repositories
-*
+* Designed to use minimal printer ink
 
 # What's our workflow?
 

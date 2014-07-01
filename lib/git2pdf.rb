@@ -62,7 +62,8 @@ class Git2Pdf
                      :bold_italic => "#{dir}/assets/fonts/Lato-BoldItalic.ttf",
                      :normal => "#{dir}/assets/fonts/Lato-Light.ttf"})
       font 'Lato'
-      batch = batch.sort { |a, b| a["ref"]<=>b["ref"] and a["project"]<=>b["project"]}
+      batch = batch.sort { |a, b| a["ref"]<=>b["ref"] and a["project"]<=>b["project"] }
+      logo = open("http://www.pocketworks.co.uk/images/logo.png")
       batch.each do |issue|
 
         ##
@@ -85,35 +86,48 @@ class Git2Pdf
         #grid(row,col).bounding_box do
         transparent(0.1) { stroke_bounds }
 
+        y_offset = 195
+
         #Ref
         font 'Lato', :style => :normal, size: 28
-        text_box issue[:ref] || "", :at => [185, 195], :width => 100, :overflow => :shrink_to_fit, :align => :right
+        text_box issue[:ref] || "", :at => [185, y_offset], :width => 100, :overflow => :shrink_to_fit, :align => :right
+
 
         #Short title
         font 'Lato', :style => :bold, size: 20
-        text_box issue[:short_title] || "", :at => [10, 190], :width => 210, :overflow => :shrink_to_fit
+        text_box issue[:short_title], :at => [10, y_offset], :width => 210, :overflow => :shrink_to_fit
 
-        # Milestone
-        font 'Lato', :style => :normal, size: 12
-        text_box issue[:milestone] ? issue[:milestone].upcase : "", :at => [10, 165], :width => 280, :overflow => :shrink_to_fit
-        #text_box fields["due"] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
-        #end
+        if issue[:milestone]
+          y_offset = y_offset - 30
+          # Milestone
+          font 'Lato', :style => :normal, size: 13
+          text_box issue[:milestone].upcase, :at => [10, y_offset], :width => 280, :overflow => :shrink_to_fit
+          #text_box fields["due"] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
+        end
 
-        # Type
-        font 'Lato', :style => :bold, size: 16, :color => '#666'
-        text_box issue[:type] || "UNKNOWN", :at => [10, 135], :width => 280, :overflow => :shrink_to_fit
+        if issue[:type]
+          y_offset = y_offset - 30
+          # Type
+          font 'Lato', :style => :bold, size: 16, :color => '888888'
+          text_box issue[:type], :at => [10, y_offset], :width => 280, :overflow => :shrink_to_fit
+        end
 
-        # Long title
-        font 'Lato', :style => :normal, size: 16
-        text_box issue[:long_title] ? issue[:long_title][0..120] : "NO DESCRIPTION", :at => [10, 115], :width => 280, :overflow => :shrink_to_fit
-
-
+        if issue[:long_title]
+          y_offset = y_offset - 20
+          # Long title
+          font 'Lato', :style => :normal, size: 16
+          text_box issue[:long_title] ? issue[:long_title][0..120] : "NO DESCRIPTION", :at => [10, y_offset], :width => 280, :overflow => :shrink_to_fit
+        end
 
         # Labels
-        font 'Lato', :style => :normal, size: 11
+        font 'Lato', :style => :normal, size: 13
         text_box issue[:labels] || "", :at => [10, 20], :width => 280, :overflow => :shrink_to_fit
         #text_box fields[:due] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
         #end
+
+        # image
+
+        image logo, :at=>[213,23], :width=>70
 
         #if col == 1
         #  row = row + 1
