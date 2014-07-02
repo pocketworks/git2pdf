@@ -62,7 +62,8 @@ class Git2Pdf
           "Lato" => {:bold => "#{dir}/assets/fonts/Lato-Bold.ttf",
                      :italic => "#{dir}/assets/fonts/Lato-LightItalic.ttf",
                      :bold_italic => "#{dir}/assets/fonts/Lato-BoldItalic.ttf",
-                     :normal => "#{dir}/assets/fonts/Lato-Light.ttf"})
+                     :normal => "#{dir}/assets/fonts/Lato-Regular.ttf",
+                     :light => "#{dir}/assets/fonts/Lato-Light.ttf"})
       font 'Lato'
       batch = batch.sort { |a, b| a["ref"]<=>b["ref"] and a["project"]<=>b["project"] }
       #logo = open("http://www.pocketworks.co.uk/images/logo.png")
@@ -107,7 +108,7 @@ class Git2Pdf
         if issue[:milestone] and issue[:milestone] != ""
           y_offset = y_offset - 30
           # Milestone
-          font 'Lato', :style => :normal, size: 16
+          font 'Lato', :style => :light, size: 16
           text_box issue[:milestone].upcase, :at => [margin, y_offset], :width => 280, :overflow => :shrink_to_fit
           #text_box fields["due"] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
           y_offset = y_offset + 20
