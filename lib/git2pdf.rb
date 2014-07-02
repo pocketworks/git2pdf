@@ -68,6 +68,7 @@ class Git2Pdf
       batch = batch.sort { |a, b| a["ref"]<=>b["ref"] and a["project"]<=>b["project"] }
       #logo = open("http://www.pocketworks.co.uk/images/logo.png")
       logo = open("#{dir}/assets/images/pocketworks.png")
+      fill_color(0,0,0,100)
       batch.each do |issue|
 
         ##
@@ -114,8 +115,6 @@ class Git2Pdf
           y_offset = y_offset + 20
         end
         
-        
-        
         fill_color "EEEEEE"
         fill_color "D0021B" if issue[:type] == "BUG"            
         fill_color "1D8FCE" if issue[:type] == "TASK"            
@@ -128,7 +127,8 @@ class Git2Pdf
         else
           fill{rectangle([0,220], margin-10, 220)}          
         end
-        fill_color "000000"
+        
+        fill_color(0,0,0,100)
         
         # if issue[:type] and issue[:type] != ""
 #           y_offset = y_offset - 20
@@ -140,7 +140,7 @@ class Git2Pdf
         if issue[:long_title]
           y_offset = y_offset - 50
           # Long title
-          font 'Lato', :style => :normal, size: 18
+          font 'Lato', :style => :light, size: 18
           text_box issue[:long_title] ? issue[:long_title][0..120] : "NO DESCRIPTION", :at => [margin, y_offset], :width => 280-margin, :overflow => :shrink_to_fit
         end
 
