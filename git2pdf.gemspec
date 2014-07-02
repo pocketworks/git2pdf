@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "git2pdf"
-  s.version = "0.1.3"
+  s.version = "0.1.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tobin Harris"]
-  s.date = "2014-07-01"
+  s.date = "2014-07-02"
   s.description = "For those that use Kanban or Scrum and want to print their cards so they can stick em on the wall"
   s.email = "tobin@pocketworks.co.uk"
   s.executables = ["git2pdf"]
