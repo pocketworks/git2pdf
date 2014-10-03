@@ -41,6 +41,10 @@ by [Pocketworks](http://pocketworks.co.uk), a UK mobile apps and sales technolog
 
     $ git2pdf gen -u tobinharris -p xxx -r "pocketworks/my-project, pocketworks/come-cool-repo, pocketworks/another-repo" -p "label1, label2"
 
+### Start printing from a specific issue number
+
+    $ git2pdf gen -u tobinharris -p xxx -r "pocketworks/my-project, pocketworks/come-cool-repo, pocketworks/another-repo" -f 120
+
 TODO:
 
 * Improve CLI syntax, it's a bit shite

@@ -13,6 +13,7 @@ class Git2Pdf
     @org = options[:org] || nil
     @api = options[:api] || 'https://api.github.com'
     @labels = "&labels=#{options[:labels]}" || ''
+    @from_number = options[:from_number] || nil
   end
 
   def execute
@@ -35,6 +36,11 @@ class Git2Pdf
       hash = JSON.parse(json)
 
       hash.each do |val|
+        if @from_number
+          if(val["number"].to_i < @from_number.to_i)
+            next
+          end
+        end
         labels = val["labels"].collect { |l| l["name"].upcase }.join(', ')
         type = ""
         type = "BUG" if labels =~ /bug/i #not billable
