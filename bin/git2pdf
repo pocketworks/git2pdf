@@ -8,6 +8,7 @@ class Git2PdfBash < Thor
   option :repos, :default => "", aliases: :r
   option :user, aliases: :u
   option :password, aliases: :p, :default=>nil
+  option :api, aliases: :a
   option :organisation, aliases: :o
 
   def gen(repositories="")
@@ -17,6 +18,9 @@ class Git2PdfBash < Thor
     end
     puts "Creating a PDF of GitHub issues for repos: #{repos.join(', ')}"
     puts "Using organisation #{options[:organisation]}" if options[:organisation]
+    if ! options[:api].empty?
+	    puts "Using API #{options[:api]}"
+    end
     pass = options[:password]
     if options[:password] == "password" or options[:password].nil? or options[:password].strip.length == 0
       #option[:password] = Password.get("GitHub Password:")
@@ -25,7 +29,7 @@ class Git2PdfBash < Thor
       pass = pass.strip.gsub(/\n/,'')
     end
 
-    g = Git2Pdf.new repos: repos, basic_auth: [options[:user],pass], org: options[:organisation], user: options[:user]
+    g = Git2Pdf.new repos: repos, basic_auth: [options[:user],pass], org: options[:organisation], user: options[:user], api: options[:api]
     done = g.execute
     puts "\n#{done} cards output to issues.pdf"
   end
