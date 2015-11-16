@@ -14,7 +14,7 @@ class Git2Pdf
     @api = options[:api] || 'https://api.github.com'
     @labels = "&labels=#{options[:labels]}" || ''
     @from_number = options[:from_number] || nil
-    @quiet_labels = ['ready', 'in progress', 'in test', 'done']
+    @quiet_labels = options[:quiet_labels] || []
   end
 
   def execute
