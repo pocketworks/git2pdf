@@ -123,22 +123,22 @@ class Git2Pdf
           #text_box fields["due"] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
           y_offset = y_offset + 20
         end
-        
+
         fill_color "EEEEEE"
-        fill_color "D0021B" if issue[:type] == "BUG"            
-        fill_color "1D8FCE" if issue[:type] == "TASK"            
+        fill_color "D0021B" if issue[:type] == "BUG"
+        fill_color "1D8FCE" if issue[:type] == "TASK"
         fill_color "FBF937" if issue[:type] == "FEATURE"
         fill_color "F5B383" if issue[:type] == "AMEND"
         fill_color "FBF937" if issue[:type] == "ENHANCEMENT"
 
         if issue[:type] and issue[:type] != ""
-          fill{rectangle([0,220], margin-10, 220)}          
+          fill{rectangle([0,220], margin-10, 220)}
         else
-          fill{rectangle([0,220], margin-10, 220)}          
+          fill{rectangle([0,220], margin-10, 220)}
         end
-        
+
         fill_color(0,0,0,100)
-        
+
         # if issue[:type] and issue[:type] != ""
 #           y_offset = y_offset - 20
 #           # Type
@@ -158,8 +158,6 @@ class Git2Pdf
         text_box issue[:labels].length == 0 ? "NO LABELS!" : issue[:labels], :at => [margin, 20], :width => 220-margin, :overflow => :shrink_to_fit
         #text_box fields[:due] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
         #end
-
-        
 
         #if col == 1
         #  row = row + 1
