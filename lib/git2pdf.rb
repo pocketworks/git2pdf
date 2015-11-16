@@ -14,7 +14,7 @@ class Git2Pdf
     @api = options[:api] || 'https://api.github.com'
     @labels = "&labels=#{options[:labels]}" || ''
     @from_number = options[:from_number] || nil
-    @silent_labels = ['ready', 'in progress', 'in test', 'done']
+    @quiet_labels = ['ready', 'in progress', 'in test', 'done']
   end
 
   def execute
@@ -42,7 +42,10 @@ class Git2Pdf
             next
           end
         end
-        labels = val["labels"].reject { |l| @silent_labels.include?(l["name"]) }.collect { |l| l["name"].upcase }.join(', ')
+        labels = val["labels"].reject { |l| @quiet_labels.include?(l["name"]) }
+                              .collect { |l| l["name"].upcase }
+                              .join(', ')
+
         type = ""
         type = "BUG" if labels =~ /bug/i #not billable
         type = "FEATURE" if labels =~ /feature/i #billable
