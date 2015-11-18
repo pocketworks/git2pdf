@@ -48,7 +48,7 @@ class Git2Pdf
 
         type = ""
         type = "BUG" if labels =~ /bug/i #not billable
-        type = "FEATURE" if labels =~ /feature/i #billable
+        type = "FEATURE" if labels =~ /userstory/i #billable
         type = "ENHANCEMENT" if labels =~ /enhancement/i #billable
         type = "AMEND" if labels =~ /amend/i #not billable
         type = "TASK" if labels =~ /task/i #not billable
