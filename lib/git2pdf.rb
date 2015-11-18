@@ -28,10 +28,10 @@ class Git2Pdf
       #json = `curl -u#{auth} https://api.github.com/repos/pocketworks/repo/issues?per_page=100 | jq '.[] | {state: .state, milestone: .milestone.title, created_at: .created_at, title: .title, number: .number, labels: [.labels[].name]}'`
       json = ""
       if @org
-        json = open("#{@api}/repos/#{@org}/#{repo}/issues?per_page=200&state=open#{@labels}", :http_basic_authentication => basic_auth).read
+        json = open("#{@api}/repos/#{@org}/#{repo}/issues?per_page=200&state=closed#{@labels}", :http_basic_authentication => basic_auth).read
       else
         # for stuff like bob/stuff
-        json = open("#{@api}/repos/#{repo}/issues?per_page=200&state=open#{@labels}", :http_basic_authentication => basic_auth).read
+        json = open("#{@api}/repos/#{repo}/issues?per_page=200&state=closed#{@labels}", :http_basic_authentication => basic_auth).read
       end
 
       hash = JSON.parse(json)
