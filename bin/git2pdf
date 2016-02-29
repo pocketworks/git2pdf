@@ -11,8 +11,8 @@ class Git2PdfBash < Thor
   option :api, aliases: :a
   option :organisation, aliases: :o
   option :labels, aliases: :l
-  option :from_number, aliases: :f
-  option :from_date, aliases: :fd
+  option :from_number, aliases: :n
+  option :from_date, aliases: :d
   option :quiet_labels, aliases: :q
 
   def gen(repositories="")
