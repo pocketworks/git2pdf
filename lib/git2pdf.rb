@@ -14,6 +14,8 @@ class Git2Pdf
     @api = options[:api] || 'https://api.github.com'
     @labels = "&labels=#{options[:labels]}" || ''
     @from_number = options[:from_number] || nil
+    @from_date = options[:from_date] || nil
+    @quiet_labels = options[:quiet_labels] || []
   end
 
   def execute
@@ -41,13 +43,24 @@ class Git2Pdf
             next
           end
         end
-        labels = val["labels"].collect { |l| l["name"].upcase }.join(', ')
+        if @from_date
+          from_date = DateTime.parse(@from_date)
+          issue_creation_date = DateTime.parse(val["created_at"])
+
+          if from_date > issue_creation_date
+            next
+          end
+        end
+        labels = val["labels"].reject { |l| @quiet_labels.include?(l["name"]) }
+                              .collect { |l| l["name"].upcase }
+                              .join(', ')
+
         type = ""
         type = "BUG" if labels =~ /bug/i #not billable
         type = "FEATURE" if labels =~ /feature/i #billable
         type = "ENHANCEMENT" if labels =~ /enhancement/i #billable
         type = "AMEND" if labels =~ /amend/i #not billable
-        type = "TASK" if labels =~ /task/i #not billable
+        type = "TASK" if labels =~ /userstory/i #not billable
 
         milestone = val["milestone"] ? val["milestone"]["title"] : ""
 
@@ -123,22 +136,22 @@ class Git2Pdf
           #text_box fields["due"] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
           y_offset = y_offset + 20
         end
-        
+
         fill_color "EEEEEE"
-        fill_color "D0021B" if issue[:type] == "BUG"            
-        fill_color "1D8FCE" if issue[:type] == "TASK"            
+        fill_color "D0021B" if issue[:type] == "BUG"
+        fill_color "1D8FCE" if issue[:type] == "TASK"
         fill_color "FBF937" if issue[:type] == "FEATURE"
         fill_color "F5B383" if issue[:type] == "AMEND"
         fill_color "FBF937" if issue[:type] == "ENHANCEMENT"
 
         if issue[:type] and issue[:type] != ""
-          fill{rectangle([0,220], margin-10, 220)}          
+          fill{rectangle([0,220], margin-10, 220)}
         else
-          fill{rectangle([0,220], margin-10, 220)}          
+          fill{rectangle([0,220], margin-10, 220)}
         end
-        
+
         fill_color(0,0,0,100)
-        
+
         # if issue[:type] and issue[:type] != ""
 #           y_offset = y_offset - 20
 #           # Type
@@ -158,8 +171,6 @@ class Git2Pdf
         text_box issue[:labels].length == 0 ? "NO LABELS!" : issue[:labels], :at => [margin, 20], :width => 220-margin, :overflow => :shrink_to_fit
         #text_box fields[:due] || "", :at=>[120,20], :width=>60, :overflow=>:shrink_to_fit
         #end
-
-        
 
         #if col == 1
         #  row = row + 1
