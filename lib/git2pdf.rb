@@ -14,6 +14,7 @@ class Git2Pdf
     @api = options[:api] || 'https://api.github.com'
     @labels = "&labels=#{options[:labels]}" || ''
     @from_number = options[:from_number] || nil
+    @from_date = options[:from_date] || nil
     @quiet_labels = options[:quiet_labels] || []
   end
 
@@ -39,6 +40,14 @@ class Git2Pdf
       hash.each do |val|
         if @from_number
           if(val["number"].to_i < @from_number.to_i)
+            next
+          end
+        end
+        if @from_date
+          from_date = DateTime.parse(@from_date)
+          issue_creation_date = DateTime.parse(val["created_at"])
+
+          if from_date > issue_creation_date
             next
           end
         end
