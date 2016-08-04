@@ -14,6 +14,19 @@ class Git2Pdf
     @api = options[:api] || 'https://api.github.com'
     @labels = "&labels=#{options[:labels]}" || ''
     @from_number = options[:from_number] || nil
+    @pulls = options[:include_pulls] || 'Y'
+    @pulls = @pulls.upcase
+    case @pulls
+    when 'Y'
+      puts "Including Pull Requests"
+    when 'N'
+      puts "Excluding Pull Requests"
+    when 'O'
+      puts "Including only Pull Requests"
+    else
+      puts "Invalid value '#{@pulls}' for option include_pulls"
+      exit
+    end
   end
 
   def execute
@@ -66,6 +79,17 @@ class Git2Pdf
         type = "ENHANCEMENT" if labels =~ /enhancement/i #billable
         type = "AMEND" if labels =~ /amend/i #not billable
         type = "TASK" if labels =~ /task/i #not billable
+        type = "PULL" if val["pull_request"]
+        
+        if type == "PULL" and @pulls == 'N'
+          puts "PULL & N" 
+          next
+        else 
+          if type != "PULL" and @pulls == 'O'
+            puts "not PULL & O" 
+            next
+          end
+        end
 
         milestone = val["milestone"] ? val["milestone"]["title"] : ""
 
@@ -148,11 +172,17 @@ class Git2Pdf
         fill_color "FBF937" if issue[:type] == "FEATURE"
         fill_color "F5B383" if issue[:type] == "AMEND"
         fill_color "FBF937" if issue[:type] == "ENHANCEMENT"
+        fill_color "33CC33" if issue[:type] == "PULL"
 
         if issue[:type] and issue[:type] != ""
           fill{rectangle([0,220], margin-10, 220)}          
         else
           fill{rectangle([0,220], margin-10, 220)}          
+        end
+        
+        if issue[:type] == "PULL"
+          fill_color "FFFFFF"
+          draw_text "Pull Request", :rotate => "90", :size => 10, :at => [8,75]
         end
         
         fill_color(0,0,0,100)

@@ -12,6 +12,7 @@ class Git2PdfBash < Thor
   option :organisation, aliases: :o
   option :labels, aliases: :l
   option :from_number, aliases: :f
+  option :include_pulls, aliases: :i, :banner => "--include_pulls=Y|N|O (Yes|No|Only) Default: Y"
 
   def gen(repositories="")
     repos = repositories.split(',').collect { |r| r.strip }
@@ -31,7 +32,7 @@ class Git2PdfBash < Thor
       pass = pass.strip.gsub(/\n/,'')
     end
 
-    g = Git2Pdf.new repos: repos, basic_auth: [options[:user],pass], org: options[:organisation], user: options[:user], api: options[:api], labels: options[:labels], from_number: options[:from_number]
+    g = Git2Pdf.new repos: repos, basic_auth: [options[:user],pass], org: options[:organisation], user: options[:user], api: options[:api], labels: options[:labels], from_number: options[:from_number], include_pulls: options[:include_pulls]
     done = g.execute
     puts "\n#{done} cards output to issues.pdf"
   end
