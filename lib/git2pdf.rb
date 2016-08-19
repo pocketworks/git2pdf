@@ -36,6 +36,16 @@ class Git2Pdf
 
   def get_issues
     batch = []
+
+    #Encode labels - Note a '+' the label needs specific handling
+    if @labels.include? "+"
+       @labels = @labels.gsub! "+", "XXYqYXX"
+     end
+     @labels = URI::encode(@labels)
+     if @labels.include? "XXYqYXX"
+       @labels = @labels.gsub! "XXYqYXX", "%2B"
+     end
+    
     self.repos.each do |repo|
       #json = `curl -u#{auth} https://api.github.com/repos/pocketworks/repo/issues?per_page=100 | jq '.[] | {state: .state, milestone: .milestone.title, created_at: .created_at, title: .title, number: .number, labels: [.labels[].name]}'`
       json = ""
