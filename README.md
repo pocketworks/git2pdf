@@ -6,7 +6,6 @@ by [Pocketworks](http://pocketworks.co.uk), a UK mobile apps and sales technolog
 
 **Print physical Kanban cards from your GitHub issues, and stick that sweet stuff on your office wall**
 
-
 ![](http://pocketworks.co.uk/images/git2pdf/git2pdf-on-wall.jpg)
 
 ## Install
@@ -31,6 +30,24 @@ by [Pocketworks](http://pocketworks.co.uk), a UK mobile apps and sales technolog
 ### Personal Access Tokens and 2 Factor Auth
 
 If you want this to work with 2 Factor Authentication, you will have to setup a personal access token here: https://github.com/settings/tokens. Then supply it as parameter '-t'. When this is enabled you don't need and are not prompted for username and password.
+
+## Pagination
+
+By default github v3 will only return 100 max issues per page. If you have more than 100 issues on your project, you will have to currently use the pagination command '-g' to loop manually through the pages. Say if you have 136:
+
+    $ git2pdf gen -u tobinharris -p xxx -r "my-project, come-cool-repo, another-repo" -o my-organisation -g 1
+    
+      100 issues output to issues.pdf
+    
+    $ cp issues.pdf issues-1.pdf
+    
+    $ git2pdf gen -u tobinharris -p xxx -r "my-project, come-cool-repo, another-repo" -o my-organisation -g 2
+
+      36 issues output to issues.pdf
+
+    $ cp issues.pdf issues-2.pdf
+
+Some alternative examples for other use cases:
 
 ### Alternative 1
 
