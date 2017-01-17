@@ -36,14 +36,14 @@ class Git2Pdf
           if @token
             json = open("#{@api}/repos/#{@org}/#{repo}/issues?state=open&per_page=100&page=#{@page}#{@labels}", "Authorization" => ("token " + @token)).read
           else
-            json = open("#{@api}/repos/#{@org}/#{repo}/issues?state=open&per_page=50&page=#{@page}#{@labels}", :http_basic_authentication => basic_auth).read
+            json = open("#{@api}/repos/#{@org}/#{repo}/issues?state=open&per_page=100&page=#{@page}#{@labels}", :http_basic_authentication => basic_auth).read
           end
       else
           if @token
-            json = open("#{@api}/repos/#{repo}/issues?state=open&per_page=50&page=#{@page}#{@labels}", "Authorization" => ("token " + @token)).read
+            json = open("#{@api}/repos/#{repo}/issues?state=open&per_page=100&page=#{@page}#{@labels}", "Authorization" => ("token " + @token)).read
         # for stuff like bob/stuff
           else
-            json = open("#{@api}/repos/#{repo}/issues?state=open&per_page=50&page=#{@page}#{@labels}", :http_basic_authentication => basic_auth).read
+            json = open("#{@api}/repos/#{repo}/issues?state=open&per_page=100&page=#{@page}#{@labels}", :http_basic_authentication => basic_auth).read
           end
       end
 
