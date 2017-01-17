@@ -16,6 +16,7 @@ class Git2Pdf
     @api = options[:api] || 'https://api.github.com'
     @labels = "&labels=#{options[:labels]}" || ''
     @from_number = options[:from_number] || nil
+    @page = options[:page] || '1'
   end
 
   def execute
@@ -29,29 +30,31 @@ class Git2Pdf
     self.repos.each do |repo|
       #json = `curl -u#{auth} https://api.github.com/repos/pocketworks/repo/issues?per_page=100 | jq '.[] | {state: .state, milestone: .milestone.title, created_at: .created_at, title: .title, number: .number, labels: [.labels[].name]}'`
       json = ""
+     
+      puts "org = #{@org} repo = #{repo}" 
       if @org
           if @token
-            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=200&state=open#{@labels}", "Authorization" => ("token " + @token)).read
+            json = open("#{@api}/repos/#{@org}/#{repo}/issues?state=open&per_page=100&page=#{@page}#{@labels}", "Authorization" => ("token " + @token)).read
           else
-            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=200&state=open#{@labels}", :http_basic_authentication => basic_auth).read
+            json = open("#{@api}/repos/#{@org}/#{repo}/issues?state=open&per_page=50&page=#{@page}#{@labels}", :http_basic_authentication => basic_auth).read
           end
       else
           if @token
-            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=200&state=open#{@labels}", "Authorization" => ("token " + @token)).read
+            json = open("#{@api}/repos/#{repo}/issues?state=open&per_page=50&page=#{@page}#{@labels}", "Authorization" => ("token " + @token)).read
         # for stuff like bob/stuff
           else
-            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=200&state=open#{@labels}", :http_basic_authentication => basic_auth).read
+            json = open("#{@api}/repos/#{repo}/issues?state=open&per_page=50&page=#{@page}#{@labels}", :http_basic_authentication => basic_auth).read
           end
       end
 
       hash = JSON.parse(json)
 
       hash.each do |val|
-        if @from_number
-          if(val["number"].to_i < @from_number.to_i)
-            next
-          end
-        end
+#        if @from_number
+#          if(val["number"].to_i < @from_number.to_i)
+#            next
+#          end
+#        end
         labels = val["labels"].collect { |l| l["name"].upcase }.join(', ')
         type = ""
         type = "BUG" if labels =~ /bug/i #not billable
