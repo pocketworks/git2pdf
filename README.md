@@ -31,7 +31,7 @@ by [Pocketworks](http://pocketworks.co.uk), a UK mobile apps and sales technolog
 
 If you want this to work with 2 Factor Authentication, you will have to setup a personal access token here: https://github.com/settings/tokens. Then supply it as parameter '-t'. When this is enabled you don't need and are not prompted for username and password.
 
-## Pagination
+### Pagination
 
 By default Github's v3 API will only return 100 max issues per page. If you have more than 100 issues on your project, you will have to currently use the pagination command '-g' to loop manually through the pages. Say if you have 136:
 
