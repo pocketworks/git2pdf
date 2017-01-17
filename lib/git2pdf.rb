@@ -16,7 +16,6 @@ class Git2Pdf
     @api = options[:api] || 'https://api.github.com'
     @labels = "&labels=#{options[:labels]}" || ''
     @from_number = options[:from_number] || nil
-    @page = options[:page] || '1'
   end
 
   def execute
@@ -34,16 +33,16 @@ class Git2Pdf
       puts "org = #{@org} repo = #{repo}" 
       if @org
           if @token
-            json = open("#{@api}/repos/#{@org}/#{repo}/issues?state=open&per_page=100&page=#{@page}#{@labels}", "Authorization" => ("token " + @token)).read
+            json = open("#{@api}/repos/#{@org}/#{repo}/issues?state=open&per_page=100#{@labels}", "Authorization" => ("token " + @token)).read
           else
-            json = open("#{@api}/repos/#{@org}/#{repo}/issues?state=open&per_page=100&page=#{@page}#{@labels}", :http_basic_authentication => basic_auth).read
+            json = open("#{@api}/repos/#{@org}/#{repo}/issues?state=open&per_page=100#{@labels}", :http_basic_authentication => basic_auth).read
           end
       else
           if @token
-            json = open("#{@api}/repos/#{repo}/issues?state=open&per_page=100&page=#{@page}#{@labels}", "Authorization" => ("token " + @token)).read
+            json = open("#{@api}/repos/#{repo}/issues?state=open&per_page=100#{@labels}", "Authorization" => ("token " + @token)).read
         # for stuff like bob/stuff
           else
-            json = open("#{@api}/repos/#{repo}/issues?state=open&per_page=100&page=#{@page}#{@labels}", :http_basic_authentication => basic_auth).read
+            json = open("#{@api}/repos/#{repo}/issues?state=open&per_page=100#{@labels}", :http_basic_authentication => basic_auth).read
           end
       end
 

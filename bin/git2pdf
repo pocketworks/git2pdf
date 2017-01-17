@@ -13,7 +13,6 @@ class Git2PdfBash < Thor
   option :organisation, aliases: :o
   option :labels, aliases: :l
   option :from_number, aliases: :f
-  option :page, aliases: :g
 
   def gen(repositories="")
     repos = repositories.split(',').collect { |r| r.strip }
@@ -32,7 +31,7 @@ class Git2PdfBash < Thor
         pass = STDIN.noecho(&:gets)
         pass = pass.strip.gsub(/\n/,'')
       end
-      g = Git2Pdf.new repos: repos, basic_auth: [options[:user],pass], page: options[:page], org: options[:organisation], user: options[:user]
+      g = Git2Pdf.new repos: repos, basic_auth: [options[:user],pass], org: options[:organisation], user: options[:user]
     
       else
         if options[:token] == "token"
@@ -43,7 +42,7 @@ class Git2PdfBash < Thor
           token = options[:token]
         end
 
-        g = Git2Pdf.new repos: repos, token: token, page: options[:page], org: options[:organisation]
+        g = Git2Pdf.new repos: repos, token: token, org: options[:organisation]
     end
     done = g.execute
     puts "\n#{done} cards output to issues.pdf"
