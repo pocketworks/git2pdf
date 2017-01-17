@@ -31,16 +31,16 @@ class Git2Pdf
       json = ""
       if @org
           if @token
-            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=100", "Authorization" => ("token " + @token)).read
+            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=200&state=open#{@labels}", "Authorization" => ("token " + @token)).read
           else
-            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=100", :http_basic_authentication => basic_auth).read
+            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=200&state=open#{@labels}", :http_basic_authentication => basic_auth).read
           end
       else
           if @token
-            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=100", "Authorization" => ("token " + @token)).read
+            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=200&state=open#{@labels}", "Authorization" => ("token " + @token)).read
         # for stuff like bob/stuff
           else
-            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=100", :http_basic_authentication => basic_auth).read
+            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=200&state=open#{@labels}", :http_basic_authentication => basic_auth).read
           end
       end
 
