@@ -28,6 +28,10 @@ by [Pocketworks](http://pocketworks.co.uk), a UK mobile apps and sales technolog
     $ git2pdf gen "uranusjr/macdown, pocketworks/git2rb" -u tobinharris -p
     $ open issues.pdf
 
+### Personal Access Tokens and 2 Factor Auth
+
+If you want this to work with 2 Factor Authentication, you will have to setup a personal access token here: https://github.com/settings/tokens. Then supply it as parameter '-t'. When this is enabled you don't need and are not prompted for username and password.
+
 ### Alternative 1
 
     $ git2pdf gen -u tobinharris -p xxx -r "my-project, come-cool-repo, another-repo" -o my-organisation
