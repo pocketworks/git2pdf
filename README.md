@@ -33,7 +33,7 @@ If you want this to work with 2 Factor Authentication, you will have to setup a 
 
 ## Pagination
 
-By default github v3 will only return 100 max issues per page. If you have more than 100 issues on your project, you will have to currently use the pagination command '-g' to loop manually through the pages. Say if you have 136:
+By default Github's v3 API will only return 100 max issues per page. If you have more than 100 issues on your project, you will have to currently use the pagination command '-g' to loop manually through the pages. Say if you have 136:
 
     $ git2pdf gen -u tobinharris -p xxx -r "my-project, come-cool-repo, another-repo" -o my-organisation -g 1
     
