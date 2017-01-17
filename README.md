@@ -45,6 +45,14 @@ by [Pocketworks](http://pocketworks.co.uk), a UK mobile apps and sales technolog
 
     $ git2pdf gen -u tobinharris -p xxx -r "pocketworks/my-project, pocketworks/come-cool-repo, pocketworks/another-repo" -f 120
 
+### Authenticate if using Github's 2 Factor Auth's 'Personal Token'
+
+    $ git2pdf gen pocketworks/my-project -t 08923409sdlk230293kosl3209029
+
+### Authenticate if using Github's 2 Factor Auth's 'Personal Token' and you want to supply the token in an interactive session (for security)
+
+    $ git2pdf gen pocketworks/my-project -t token
+
 TODO:
 
 * Improve CLI syntax, it's a bit shite

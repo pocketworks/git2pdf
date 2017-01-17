@@ -6,11 +6,13 @@ class Git2Pdf
   attr_accessor :repos
   attr_accessor :basic_auth
   attr_accessor :api
+  attr_accessor :token
 
   def initialize(options={})
     @repos = options[:repos] || []
     @basic_auth = options[:basic_auth] || nil
     @org = options[:org] || nil
+    @token = options[:token]
     @api = options[:api] || 'https://api.github.com'
     @labels = "&labels=#{options[:labels]}" || ''
     @from_number = options[:from_number] || nil
@@ -22,15 +24,24 @@ class Git2Pdf
   end
 
   def get_issues
+    puts "token :" + @token
     batch = []
     self.repos.each do |repo|
       #json = `curl -u#{auth} https://api.github.com/repos/pocketworks/repo/issues?per_page=100 | jq '.[] | {state: .state, milestone: .milestone.title, created_at: .created_at, title: .title, number: .number, labels: [.labels[].name]}'`
       json = ""
       if @org
-        json = open("#{@api}/repos/#{@org}/#{repo}/issues?per_page=200&state=open#{@labels}", :http_basic_authentication => basic_auth).read
+          if @token
+            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=100", "Authorization" => ("token " + @token)).read
+          else
+            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=100", :http_basic_authentication => basic_auth).read
+          end
       else
+          if @token
+            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=100", "Authorization" => ("token " + @token)).read
         # for stuff like bob/stuff
-        json = open("#{@api}/repos/#{repo}/issues?per_page=200&state=open#{@labels}", :http_basic_authentication => basic_auth).read
+          else
+            json = open("#{@api}/repos/bbc/hive-ci/issues?per_page=100", :http_basic_authentication => basic_auth).read
+          end
       end
 
       hash = JSON.parse(json)
