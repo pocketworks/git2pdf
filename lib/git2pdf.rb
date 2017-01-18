@@ -14,6 +14,19 @@ class Git2Pdf
     @api = options[:api] || 'https://api.github.com'
     @labels = "&labels=#{options[:labels]}" || ''
     @from_number = options[:from_number] || nil
+    @pulls = options[:include_pulls] || 'Y'
+    @pulls = @pulls.upcase
+    case @pulls
+    when 'Y'
+      puts "Including Pull Requests"
+    when 'N'
+      puts "Excluding Pull Requests"
+    when 'O'
+      puts "Including only Pull Requests"
+    else
+      puts "Invalid value '#{@pulls}' for option include_pulls"
+      exit
+    end
   end
 
   def execute
@@ -23,17 +36,45 @@ class Git2Pdf
 
   def get_issues
     batch = []
+
+    #Encode labels - Note a '+' the label needs specific handling
+    if @labels.include? "+"
+       @labels = @labels.gsub! "+", "XXYqYXX"
+     end
+     @labels = URI::encode(@labels)
+     if @labels.include? "XXYqYXX"
+       @labels = @labels.gsub! "XXYqYXX", "%2B"
+     end
+    
     self.repos.each do |repo|
       #json = `curl -u#{auth} https://api.github.com/repos/pocketworks/repo/issues?per_page=100 | jq '.[] | {state: .state, milestone: .milestone.title, created_at: .created_at, title: .title, number: .number, labels: [.labels[].name]}'`
       json = ""
-      if @org
-        json = open("#{@api}/repos/#{@org}/#{repo}/issues?per_page=200&state=open#{@labels}", :http_basic_authentication => basic_auth).read
-      else
-        # for stuff like bob/stuff
-        json = open("#{@api}/repos/#{repo}/issues?per_page=200&state=open#{@labels}", :http_basic_authentication => basic_auth).read
-      end
+      page = 1
+      hash = []
+      count = 0
+      print "Loading: "
+      while true
+        if @org
+          json = open("#{@api}/repos/#{@org}/#{repo}/issues?&per_page=200&state=open#{@labels}", :http_basic_authentication => basic_auth).read
+        else
+          # for stuff like bob/stuff
+          json = open("#{@api}/repos/#{repo}/issues?page=#{page}&per_page=200&state=open#{@labels}", :http_basic_authentication => basic_auth).read
+        end
 
-      hash = JSON.parse(json)
+
+        got = JSON.parse(json)
+        len = got.length
+        count += len
+        
+        if len > 0
+          hash += got
+          page += 1
+          print "#{count} "
+        else
+          puts "issues"
+          break
+        end
+      end
 
       hash.each do |val|
         if @from_number
@@ -48,6 +89,17 @@ class Git2Pdf
         type = "ENHANCEMENT" if labels =~ /enhancement/i #billable
         type = "AMEND" if labels =~ /amend/i #not billable
         type = "TASK" if labels =~ /task/i #not billable
+        type = "PULL" if val["pull_request"]
+        
+        if type == "PULL" and @pulls == 'N'
+          puts "PULL & N" 
+          next
+        else 
+          if type != "PULL" and @pulls == 'O'
+            puts "not PULL & O" 
+            next
+          end
+        end
 
         milestone = val["milestone"] ? val["milestone"]["title"] : ""
 
@@ -130,11 +182,17 @@ class Git2Pdf
         fill_color "FBF937" if issue[:type] == "FEATURE"
         fill_color "F5B383" if issue[:type] == "AMEND"
         fill_color "FBF937" if issue[:type] == "ENHANCEMENT"
+        fill_color "33CC33" if issue[:type] == "PULL"
 
         if issue[:type] and issue[:type] != ""
           fill{rectangle([0,220], margin-10, 220)}          
         else
           fill{rectangle([0,220], margin-10, 220)}          
+        end
+        
+        if issue[:type] == "PULL"
+          fill_color "FFFFFF"
+          draw_text "Pull Request", :rotate => "90", :size => 10, :at => [8,75]
         end
         
         fill_color(0,0,0,100)
