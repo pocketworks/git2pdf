@@ -6,6 +6,7 @@ class Git2Pdf
   attr_accessor :repos
   attr_accessor :basic_auth
   attr_accessor :api
+  attr_accessor :labels
 
   def initialize(options={})
     @repos = options[:repos] || []
