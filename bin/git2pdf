@@ -7,6 +7,7 @@ class Git2PdfBash < Thor
   desc "gen <repository1,repository2>", "Create a PDF for the open issues in a given repository."
   option :repos, :default => "", aliases: :r
   option :user, aliases: :u
+  option :token, aliases: :t
   option :password, aliases: :p, :default=>nil
   option :api, aliases: :a
   option :organisation, aliases: :o
@@ -24,19 +25,28 @@ class Git2PdfBash < Thor
 	    puts "Using API #{options[:api]}"
     end
     pass = options[:password]
-    if options[:password] == "password" or options[:password].nil? or options[:password].strip.length == 0
-      #option[:password] = Password.get("GitHub Password:")
-      puts "Password: "
-      pass = STDIN.noecho(&:gets)
-      pass = pass.strip.gsub(/\n/,'')
-    end
+    if options[:token].nil?
+      if options[:token].nil? and (options[:password] == "password" or options[:password].nil? or options[:password].strip.length == 0)
+        puts "Password: "
+        pass = STDIN.noecho(&:gets)
+        pass = pass.strip.gsub(/\n/,'')
+      end
+      g = Git2Pdf.new repos: repos, basic_auth: [options[:user],pass], labels: options[:labels], org: options[:organisation], user: options[:user]
+    
+      else
+        if options[:token] == "token"
+          puts "Token: "
+          pass = STDIN.noecho(&:gets)
+          token = pass.strip.gsub(/\n/,'')
+        else
+          token = options[:token]
+        end
 
-    g = Git2Pdf.new repos: repos, basic_auth: [options[:user],pass], org: options[:organisation], user: options[:user], api: options[:api], labels: options[:labels], from_number: options[:from_number]
+        g = Git2Pdf.new repos: repos, token: token, labels: options[:labels], org: options[:organisation]
+    end
     done = g.execute
     puts "\n#{done} cards output to issues.pdf"
   end
-
-
 end
 
 Git2PdfBash.start(ARGV)
