@@ -29,7 +29,16 @@ by [Pocketworks](http://pocketworks.co.uk), a UK mobile apps and sales technolog
 
 ### Personal Access Tokens and 2 Factor Auth
 
-If you want this to work with 2 Factor Authentication, you will have to setup a personal access token here: https://github.com/settings/tokens. Then supply it as parameter '-t'. When this is enabled you don't need and are not prompted for username and password.
+If you want this to work with 2 Factor Authentication, you will have to setup a personal access token here: https://github.com/settings/tokens. Then supply it as parameter '-t'. When this is enabled you don't need and are not prompted for username and password. E.g.:
+
+### Authenticate if using Github's 2 Factor Auth's 'Personal Token'
+
+    $ git2pdf gen pocketworks/my-project -t 08923409sdlk230293kosl3209029
+
+### Authenticate if using Github's 2 Factor Auth's 'Personal Token' and you want to supply the token in an interactive session (for security)
+
+    $ git2pdf gen pocketworks/my-project -t token
+
 
 Some alternative examples for other use cases:
 
@@ -49,14 +58,6 @@ Some alternative examples for other use cases:
 ### Start printing from a specific issue number
 
     $ git2pdf gen -u tobinharris -p xxx -r "pocketworks/my-project, pocketworks/come-cool-repo, pocketworks/another-repo" -f 120
-
-### Authenticate if using Github's 2 Factor Auth's 'Personal Token'
-
-    $ git2pdf gen pocketworks/my-project -t 08923409sdlk230293kosl3209029
-
-### Authenticate if using Github's 2 Factor Auth's 'Personal Token' and you want to supply the token in an interactive session (for security)
-
-    $ git2pdf gen pocketworks/my-project -t token
 
 TODO:
 
